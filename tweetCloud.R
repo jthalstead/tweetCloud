@@ -15,11 +15,11 @@ rmNonAlphabet = function(str) {
 
 removeURL = function(x) gsub("http*", "", x)
 
-setwd("~/Mega/cloudy")
+setwd("D:\\Dropbox\\tweetCloud")
 source("creds.R")
 setup_twitter_oauth(api.key, api.secret, token, token.secret)
 
-tweets = searchTwitter("Obama", n = 500, lang = "en")
+tweets = searchTwitter("Trump", n = 2000, lang = "en")
 tweet.df = twListToDF(tweets)
 tweetCorpus = Corpus(VectorSource(tweet.df$text))
 tweetCorpus = tm_map(tweetCorpus, content_transformer(rmNonAlphabet))
@@ -33,5 +33,4 @@ tweetCorpus = tm_map(tweetCorpus, removeWords, c('rt', stopwords('english')))
 m = as.matrix(TermDocumentMatrix(tweetCorpus))
 word.freq = sort(rowSums(m), decreasing = T)
 dm = data.frame(word = names(word.freq), freq = word.freq)
-
-wordcloud(dm$word, dm$freq, min.freq = 5, random.order = F, colors = brewer.pal(8, "Dark2"))
+wordcloud(dm$word, dm$freq, min.freq = 50, random.order = F, colors = brewer.pal(8, "Accent"))
